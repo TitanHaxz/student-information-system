@@ -7,10 +7,6 @@ const saveButton = document.getElementById("save-btn");
 const tbody = document.getElementById("tbody");
 const pagination = document.getElementById("pagination");
 
-const itemsPerPage = 20;
-let currentPage = 1;
-let students = [];
-
 // add tooltip 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -172,6 +168,9 @@ const addEditEventListeners = () => {
     });
 };
 
+const itemsPerPage = 20;
+let currentPage = 1;
+
 const renderPagination = () => {
     pagination.innerHTML = "";
 
@@ -191,6 +190,7 @@ const renderPagination = () => {
     }
 };
 
+let students = [];
 // save student information
 saveButton.addEventListener("click", () => {
     const inputs = [nameInput, surnameInput, ageInput, emailInput, studentNumberInput];
