@@ -42,6 +42,8 @@ const renderTable = () => {
 
     currentStudents.forEach((student, index) => {
         const tr = document.createElement("tr");
+        tr.setAttribute("data-id", student.ID);
+
         if (index % 2 !== 0) {
             tr.style.backgroundColor = "#eff4f3";
         }
@@ -92,10 +94,11 @@ const renderTable = () => {
 const addEditEventListeners = () => {
     const editButtons = document.getElementsByClassName("btn-warning");
 
-    Array.from(editButtons).forEach((editButton, index) => {
+    Array.from(editButtons).forEach((editButton) => {
         const tr = editButton.parentElement.parentElement;
         const tdList = Array.from(tr.querySelectorAll("td:not(:last-child)"));
-        const student = students[index];
+        const studentID = tr.getAttribute("data-id");
+        const student = students.find(student => student.ID === studentID);
 
         const makeEditable = () => {
             tdList.forEach((td) => {
