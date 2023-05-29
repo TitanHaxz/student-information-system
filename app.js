@@ -23,7 +23,7 @@ const generateID = () => {
         id += randomNumber;
     }
     return id;
-}
+};
 
 const retrieveDataFromLocalStorage = () => {
     const storedData = localStorage.getItem("students");
@@ -44,19 +44,14 @@ const renderTable = () => {
     const endIndex = startIndex + itemsPerPage;
     const currentStudents = students.slice(startIndex, endIndex);
 
-    currentStudents.forEach((student) => {
-
+    currentStudents.forEach((student, index) => {
         const tr = document.createElement("tr");
-        const rows = Array.from(tbody.getElementsByTagName("tr"));
+        if (index % 2 !== 0) {
+            tr.style.backgroundColor = "#eff4f3";
+        }
 
-        rows.forEach((row, index) => {
-            if (index % 2 !== 0) {
-                row.style.backgroundColor = "#eff4f3";
-            }
-        });
-
-        Object.values(student).forEach((value, index) => {
-            if (index === 0) {
+        Object.values(student).forEach((value, columnIndex) => {
+            if (columnIndex === 0) {
                 return;
             }
             const td = document.createElement("td");
@@ -103,7 +98,7 @@ const addEditEventListeners = () => {
 
     Array.from(editButtons).forEach((editButton, index) => {
         const tr = editButton.parentElement.parentElement;
-        const tdList = tr.querySelectorAll("td:not(:last-child)");
+        const tdList = Array.from(tr.querySelectorAll("td:not(:last-child)"));
         const student = students[index];
 
         const makeEditable = () => {
@@ -120,7 +115,7 @@ const addEditEventListeners = () => {
         };
 
         const saveChanges = () => {
-            const inputs = tr.querySelectorAll("input");
+            const inputs = Array.from(tr.querySelectorAll("input"));
 
             if (!validateInputs(inputs)) {
                 return;
@@ -159,11 +154,7 @@ const addEditEventListeners = () => {
             }
 
             const studentNumberValue = inputs[4].value;
-            const isDuplicate = students.some((s, i) => i !== index && s.studentNumber === studentNumberValue);
-            if (isDuplicate) {
-                alert("Bu öğrenci numarası zaten sistemde kayıtlı.");
-                isValid = false;
-            } else if (!/^\d+$/.test(studentNumberValue)) {
+            if (!/^\d+$/.test(studentNumberValue)) {
                 alert("Lütfen geçerli bir öğrenci numarası girin.");
                 isValid = false;
             }
