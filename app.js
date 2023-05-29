@@ -159,7 +159,11 @@ const addEditEventListeners = () => {
             }
 
             const studentNumberValue = inputs[4].value;
-            if (!/^\d+$/.test(studentNumberValue)) {
+            const isDuplicate = students.some((s, i) => i !== index && s.studentNumber === studentNumberValue);
+            if (isDuplicate) {
+                alert("Bu öğrenci numarası zaten sistemde kayıtlı.");
+                isValid = false;
+            } else if (!/^\d+$/.test(studentNumberValue)) {
                 alert("Lütfen geçerli bir öğrenci numarası girin.");
                 isValid = false;
             }
