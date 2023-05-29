@@ -1,0 +1,17 @@
+#name-th,
+#surname-th,
+#age-th,
+#email-th,
+#student-number-th,
+.page-link {
+	cursor: pointer;
+}
+
+#name-th:hover,
+#surname-th:hover,
+#age-th:hover,
+#email-th:hover,
+#student-number-th:hover {
+	background-color: #edecec;
+}
+
