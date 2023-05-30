@@ -273,7 +273,9 @@ const addEditEventListeners = () => {
 
             inputs.forEach((input) => {
                 if (input.value === "") {
-                    alert("Formu boşluk olmadan doldurun.");
+                    showBootstrapToast("Formu boşluk olmadan doldurun.",
+                        `<i class="bi bi-emoji-frown-fill text-danger"></i>`,
+                        "bg-danger");
                     isValid = false;
                 }
             });
