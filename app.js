@@ -10,7 +10,7 @@ const pagination = document.getElementById("pagination");
 // add tooltip 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
+ 
 // ID generator
 const generateID = () => {
     let id = '';
