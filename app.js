@@ -10,18 +10,18 @@ const pagination = document.getElementById("pagination");
 // add tooltip 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
- 
+
 // ID generator
 const generateID = () => {
     let id = '';
     for (let i = 0; i < 6; i++) {
         let randomNumber = Math.floor(Math.random() * 10);
         id += randomNumber;
-    }
+    };
     return id;
 };
 
-function showBootstrapToast(message, strongMessage, bg) {
+const showBootstrapToast = (message, strongMessage, bg) => {
     const toastContainer = document.createElement("div");
     toastContainer.classList.add("position-fixed", "top-0", "start-50", "translate-middle-x", "p-3");
 
@@ -60,26 +60,26 @@ function showBootstrapToast(message, strongMessage, bg) {
 
     const toastInstance = new bootstrap.Toast(toast);
     toastInstance.show();
-}
+};
 
 let students = [];
 // save student information
 saveButton.addEventListener("click", () => {
     const inputs = [nameInput, surnameInput, ageInput, emailInput, studentNumberInput];
 
-    if (inputs.some(input => input.value === "")) {
+    if (inputs.some(input => input.value.trim() === "")) {
         showBootstrapToast("Formu boşluk olmadan doldurun.",
             `<i class="bi bi-emoji-frown-fill text-danger"></i>`,
             "bg-danger");
         return;
-    }
+    };
 
     if (!emailInput.value.includes("@")) {
         showBootstrapToast(`E-postada "@" sembolü kullanılmalıdır.`,
             `<i class="bi bi-emoji-frown-fill text-danger"></i>`,
             "bg-danger");
         return;
-    }
+    };
 
     const isDuplicate = students.some(student => student.studentNumber === studentNumberInput.value);
     if (isDuplicate) {
@@ -112,32 +112,26 @@ saveButton.addEventListener("click", () => {
         "bg-success");
 });
 
-ageInput.addEventListener("keydown", (event) => {
+const handleInputKeydown = (event, inputElement, errorMessage) => {
     const key = event.key;
     const isNumber = /^\d$/.test(key);
-    const isDeletion = key === "Backspace" || key === "Delete" || key === "Tab";
-    if (!isNumber && !isDeletion) {
+    const isAllow = key === "Backspace" || key === "Delete" || key === "Tab" || (event.ctrlKey && key === "v");
+    if (!isNumber && !isAllow) {
         event.preventDefault();
-        ageInput.setAttribute("data-bs-original-title", "Lütfen geçerli bir yaş girin.");
-        ageInput.classList.add("is-invalid");
+        inputElement.setAttribute("data-bs-original-title", errorMessage);
+        inputElement.classList.add("is-invalid");
     } else {
-        ageInput.removeAttribute("data-bs-original-title");
-        ageInput.classList.remove("is-invalid");
+        inputElement.removeAttribute("data-bs-original-title");
+        inputElement.classList.remove("is-invalid");
     }
+};
+
+ageInput.addEventListener("keydown", (event) => {
+    handleInputKeydown(event, ageInput, "Lütfen geçerli bir yaş girin.");
 });
 
 studentNumberInput.addEventListener("keydown", (event) => {
-    const key = event.key;
-    const isNumber = /^\d$/.test(key);
-    const isDeletion = key === "Backspace" || key === "Delete" || key === "Tab" || (event.ctrlKey && key === "v");
-    if (!isNumber && !isDeletion) {
-        event.preventDefault();
-        studentNumberInput.setAttribute("data-bs-original-title", "Lütfen geçerli bir öğrenci numarası girin.");
-        studentNumberInput.classList.add("is-invalid");
-    } else {
-        studentNumberInput.removeAttribute("data-bs-original-title");
-        studentNumberInput.classList.remove("is-invalid");
-    }
+    handleInputKeydown(event, studentNumberInput, "Lütfen geçerli bir öğrenci numarası girin.");
 });
 
 const saveDataToLocalStorage = () => {
@@ -330,7 +324,6 @@ const renderPagination = () => {
         pagination.appendChild(li);
     }
 };
-
 
 // ------------------- sorting ----------------- //
 
