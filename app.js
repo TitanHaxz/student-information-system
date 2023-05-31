@@ -362,22 +362,17 @@ const getValueFromColumn = (row, columnIndex, dataType) => {
     return value.toLowerCase();
 };
 
-let nameSorting = false;
-const nameTh = document.getElementById("name-th");
-addSortingEventListener(nameTh, 0, nameSorting, "string");
+let nameSorting, surnameSorting, ageSorting, emailSorting, studentNumberSorting;
+nameSorting = surnameSorting = ageSorting = emailSorting = studentNumberSorting = false;
 
-let surnameSorting = false;
-const surnameTh = document.getElementById("surname-th");
-addSortingEventListener(surnameTh, 1, surnameSorting, "string");
+const headers = [
+    { element: document.getElementById("name-th"), sortingState: nameSorting, dataType: "string", columnIndex: 0 },
+    { element: document.getElementById("surname-th"), sortingState: surnameSorting, dataType: "string", columnIndex: 1 },
+    { element: document.getElementById("age-th"), sortingState: ageSorting, dataType: "numeric", columnIndex: 2 },
+    { element: document.getElementById("email-th"), sortingState: emailSorting, dataType: "string", columnIndex: 3 },
+    { element: document.getElementById("student-number-th"), sortingState: studentNumberSorting, dataType: "string", columnIndex: 4 }
+];
 
-let ageSorting = false;
-const ageTh = document.getElementById("age-th");
-addSortingEventListener(ageTh, 2, ageSorting, "numeric");
-
-let emailSorting = false;
-const emailTh = document.getElementById("email-th");
-addSortingEventListener(emailTh, 3, emailSorting, "string");
-
-let studentNumberSorting = false;
-const studentNumberTh = document.getElementById("student-number-th");
-addSortingEventListener(studentNumberTh, 4, studentNumberSorting, "string");
+headers.forEach(header => {
+    addSortingEventListener(header.element, header.columnIndex, header.sortingState, header.dataType);
+});
