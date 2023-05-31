@@ -102,7 +102,7 @@ saveButton.addEventListener("click", () => {
 
     renderTable();
 
-    [nameInput, surnameInput, ageInput, emailInput, studentNumberInput].forEach(input => {
+    inputs.forEach(input => {
         input.value = "";
     });
 
@@ -266,7 +266,7 @@ const addEditEventListeners = () => {
             let isValid = true;
 
             inputs.forEach((input) => {
-                if (input.value === "") {
+                if (input.value.trim() === "") {
                     showBootstrapToast("Formu boşluk olmadan doldurun.",
                         `<i class="bi bi-emoji-frown-fill text-danger"></i>`,
                         "bg-danger");
@@ -327,121 +327,57 @@ const renderPagination = () => {
 
 // ------------------- sorting ----------------- //
 
-// name sorting
+// name, surname and email sorting
+const addSortingEventListener = (headerElement, columnIndex, sortingState, dataType) => {
+    headerElement.addEventListener("click", () => {
+        const rows = Array.from(tbody.getElementsByTagName("tr"));
+
+        rows.sort((a, b) => {
+            const valueA = getValueFromColumn(a, columnIndex, dataType);
+            const valueB = getValueFromColumn(b, columnIndex, dataType);
+
+            if (valueA === valueB) {
+                return 0;
+            }
+
+            if (sortingState) {
+                return valueA > valueB ? -1 : 1;
+            } else {
+                return valueA > valueB ? 1 : -1;
+            }
+        });
+
+        rows.forEach((row) => row.remove());
+        rows.forEach((row) => tbody.appendChild(row));
+
+        sortingState = !sortingState;
+    });
+};
+
+const getValueFromColumn = (row, columnIndex, dataType) => {
+    const value = row.getElementsByTagName("td")[columnIndex].textContent;
+    if (dataType === "numeric") {
+        return parseInt(value);
+    }
+    return value.toLowerCase();
+};
+
 let nameSorting = false;
 const nameTh = document.getElementById("name-th");
-nameTh.addEventListener("click", () => {
-    const rows = Array.from(tbody.getElementsByTagName("tr"));
+addSortingEventListener(nameTh, 0, nameSorting, "string");
 
-    rows.sort((a, b) => {
-        const nameA = a.getElementsByTagName("td")[0].textContent.toLowerCase();
-        const nameB = b.getElementsByTagName("td")[0].textContent.toLowerCase();
-        if (nameSorting) {
-            return nameB.localeCompare(nameA);
-        } else {
-            return nameA.localeCompare(nameB);
-        }
-    });
-
-    rows.forEach((row) => row.remove());
-    rows.forEach((row) => tbody.appendChild(row));
-
-    nameSorting = !nameSorting;
-});
-
-// surname sorting
 let surnameSorting = false;
 const surnameTh = document.getElementById("surname-th");
-surnameTh.addEventListener("click", () => {
-    const rows = Array.from(tbody.getElementsByTagName("tr"));
+addSortingEventListener(surnameTh, 1, surnameSorting, "string");
 
-    rows.sort((a, b) => {
-        const surnameA = a.getElementsByTagName("td")[1].textContent.toLowerCase();
-        const surnameB = b.getElementsByTagName("td")[1].textContent.toLowerCase();
-        if (surnameSorting) {
-            return surnameB.localeCompare(surnameA);
-        } else {
-            return surnameA.localeCompare(surnameB);
-        }
-    });
-
-    rows.forEach((row) => row.remove());
-    rows.forEach((row) => tbody.appendChild(row));
-
-    surnameSorting = !surnameSorting;
-});
-
-// age sorting
 let ageSorting = false;
 const ageTh = document.getElementById("age-th");
-ageTh.addEventListener("click", () => {
-    const rows = Array.from(tbody.getElementsByTagName("tr"));
+addSortingEventListener(ageTh, 2, ageSorting, "numeric");
 
-    rows.sort((a, b) => {
-        const ageA = parseInt(a.getElementsByTagName("td")[2].textContent);
-        const ageB = parseInt(b.getElementsByTagName("td")[2].textContent);
-        if (ageA === ageB) {
-            return 0;
-        }
-        if (ageSorting) {
-            return ageA > ageB ? -1 : 1;
-        } else {
-            return ageA > ageB ? 1 : -1;
-        }
-    });
-
-    rows.forEach((row) => row.remove());
-    rows.forEach((row) => tbody.appendChild(row));
-
-    ageSorting = !ageSorting;
-});
-
-
-// email sorting
 let emailSorting = false;
 const emailTh = document.getElementById("email-th");
-emailTh.addEventListener("click", () => {
-    const rows = Array.from(tbody.getElementsByTagName("tr"));
+addSortingEventListener(emailTh, 3, emailSorting, "string");
 
-    rows.sort((a, b) => {
-        const emailA = a.getElementsByTagName("td")[3].textContent.toLowerCase();
-        const emailB = b.getElementsByTagName("td")[3].textContent.toLowerCase();
-        if (emailSorting) {
-            return emailB.localeCompare(emailA);
-        } else {
-            return emailA.localeCompare(emailB);
-        }
-    });
-
-    rows.forEach((row) => row.remove());
-    rows.forEach((row) => tbody.appendChild(row));
-
-    emailSorting = !emailSorting;
-
-});
-
-// student number sorting
 let studentNumberSorting = false;
 const studentNumberTh = document.getElementById("student-number-th");
-studentNumberTh.addEventListener("click", () => {
-    const rows = Array.from(tbody.getElementsByTagName("tr"));
-
-    rows.sort((a, b) => {
-        const numA = a.getElementsByTagName("td")[4].textContent;
-        const numB = b.getElementsByTagName("td")[4].textContent;
-        if (numA === numB) {
-            return 0;
-        }
-        if (studentNumberSorting) {
-            return numA > numB ? -1 : 1;
-        } else {
-            return numA > numB ? 1 : -1;
-        }
-    });
-
-    rows.forEach((row) => row.remove());
-    rows.forEach((row) => tbody.appendChild(row));
-
-    studentNumberSorting = !studentNumberSorting;
-});
-
+addSortingEventListener(studentNumberTh, 4, studentNumberSorting, "string");
